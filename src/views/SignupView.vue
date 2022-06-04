@@ -1,35 +1,47 @@
 <template>
   <div class="container">
-    <h2>Signup</h2>
+    <h4 class="page-title">ユーザー登録</h4>
       <div class="col-12">
         <form v-on:submit.prevent="createUser()" class="col-12">
           <div class="row">
             <div class="col-sm-6">
-              <p><strong>Required</strong></p>
-              <small>First_name</small>
+              <p><strong>必須項目*</strong></p>
+              <small>姓*</small>
               <input type="text" v-model="user.first_name" class="form-control">
-              <small>Last_name</small>
+              <small>名*</small>
               <input type="text" v-model="user.last_name" class="form-control">
-              <small>Email</small>
+              <small>メールアドレス*</small>
               <input type="email" v-model="user.email" class="form-control">
-              <small>Password</small>
+              <small>パスワード*</small>
               <input type="password" v-model="user.password" class="form-control">
-              <small>Confirm password</small>
+              <small>パスワード確認*</small>
               <input type="password" v-model="user.passwordConfirm" class="form-control">
             </div>
             <div class="col-sm-6">
-              <p><strong>Optional</strong></p>
-              <small>Phone</small>
+              <p><strong>任意項目</strong></p>
+              <small>電話番号</small>
               <input type="text" v-model="user.phone" class="form-control">
-              <small>Zip</small>
+              <small>郵便番号</small>
               <input type="text" v-model="user.zip" class="form-control">
-              <small>State</small>
-              <input type="text" v-model="user.state" class="form-control">
-              <small>City</small>
+              <small>都道府県</small>
+              <select
+                v-model="user.state"
+                class="form-select"
+                autocomplete="address-level1"
+              >
+                <option
+                  v-for="state in states"
+                  :key="state"
+                  :value="state"
+                >
+                  {{ state }}
+                </option>
+              </select>
+              <small>市区町村</small>
               <input type="text" v-model="user.city" class="form-control">
-              <small>Address</small>
+              <small>以下の住所</small>
               <input type="text" v-model="user.address" class="form-control">
-              <small>Gender</small>
+              <small>性別</small>
               <select v-model="user.gender" class="form-select">
                 <option
                   v-for="gender in genders"
@@ -39,8 +51,13 @@
                   {{ gender }}
                 </option>
               </select>
-              <small>Birthday</small>
-              <input type="date" v-model="user.birthday" class="form-control">
+              <small>生年月日</small>
+              <input
+                type="date"
+                v-model="user.birthday"
+                class="form-control"
+                placeholder="12/31/2022"
+              >
             </div>
             <div class="btn-container col-sm-6">
               <button
@@ -48,9 +65,9 @@
                 class="btn btn-secondary"
                 @click="cancelSignup()"
               >
-                Cancel
+                ホームに戻る
               </button>
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary">登録する</button>
             </div>
           </div>
         </form>
@@ -65,10 +82,22 @@ import axios from "axios"
       return {
         user: {},
         genders: [
-          "Male",
-          "Female",
-          "N/A",
-          "Rather not to say"
+          "男性",
+          "女性",
+          "該当なし",
+          "回答しない"
+        ],
+        states: [
+          "北海道", "青森県", "岩手県", "宮城県", "秋田県",
+          "山形県", "福島県", "茨城県", "栃木県", "群馬県",
+          "埼玉県", "千葉県", "東京都", "神奈川県", "新潟県",
+          "富山県", "石川県", "福井県", "山梨県", "長野県",
+          "岐阜県", "静岡県", "愛知県", "三重県", "滋賀県",
+          "京都府", "大阪府", "兵庫県", "奈良県", "和歌山県",
+          "鳥取県", "島根県", "岡山県", "広島県", "山口県",
+          "徳島県", "香川県", "愛媛県", "高知県", "福岡県",
+          "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県",
+          "鹿児島県", "沖縄県"
         ],
       }
     },
@@ -107,5 +136,8 @@ import axios from "axios"
 <style scoped>
   .col-sm-6 {
     text-align: left;
+  }
+  .page-title {
+    margin-bottom: 30px;
   }
 </style>
