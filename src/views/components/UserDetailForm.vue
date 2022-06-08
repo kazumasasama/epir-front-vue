@@ -1,15 +1,8 @@
 <template>
-  <div class="modal fade" id="new-user-dialog">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">新規ユーザー</h5>
-        </div>
-        <div class="modal-body event-detail-modal-body">
+          <h5 class="user-show-title">ユーザー詳細</h5>
           <form>
             <div class="row">
               <p>{{ errors }}</p>
-              <!-- <p class="modal-title"><small>パスワードが自動生成されメルアドレスにお知らせが送付されます</small></p> -->
               <div class="col-sm-6">
                 <p><strong>必須項目*</strong></p>
                 <small>姓*</small>
@@ -54,7 +47,7 @@
                     {{ gender }}
                   </option>
                 </select>
-                <div v-if="showPasswordInputs">
+                <div v-if="passwordAppearance">
                   <small>パスワード*</small>
                   <input
                     type="password"
@@ -159,18 +152,15 @@
                 <!-- <button class="btn btn-primary">Update</button> -->
                 <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">閉じる</button>
                 <button class="btn btn-warning btn-sm" @click="this.user = {}">クリア</button>
-                <button class="btn btn-primary btn-sm" @click.prevent="handleCreateUser()">登録</button>
+                <button class="btn btn-primary btn-sm" @click="handleUpdateUser()">登録</button>
               </div>
             </div>
           </form>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
   export default {
+    emits: ["updateUser"],
     data() {
       return {
         user: {},
@@ -198,24 +188,39 @@
           "!!!",
           "xxx",
         ],
+        passwordAppearance: true,
       }
     },
     props: {
       errors: null,
+      userProps: {},
+    },
+    watch: {
+      userProps() {
+        this.user = this.userProps;
+      },
+      // $route(to, from) {
+      //   from
+      //   if (to.path === '/admin/users/:id') {
+      //     this.passwordAppearance = false;
+      //   }
+      // }
     },
     created() {
+      this.user = this.userProps;
     },
     computed: {
       showPasswordInputs() {
-        if (this.$route.path === '/admin/users') {
+        if (this.$route.path !== '/admin/users/:id') {
+          return true
+        } else {
           return false
         }
-        return true
       },
     },
     methods: {
-      handleCreateUser() {
-        this.$emit('createUser', this.user);
+      handleUpdateUser() {
+        this.$emit('updateUser', this.user);
       },
       showPassword() {
         let pwInput = document.querySelectorAll('.pwInput');
@@ -234,5 +239,16 @@
 <style scoped>
 .btn-container {
   margin-top: 20px;
+}
+.col-sm-6 {
+  text-align: left;
+  padding: 15px;
+}
+.col-sm-4 {
+  text-align: left;
+  padding: 15px;
+}
+.user-show-title {
+  text-align: left;
 }
 </style>

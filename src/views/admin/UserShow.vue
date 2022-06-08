@@ -4,15 +4,15 @@
     <div class="col-12 user-btn-container">
       <button
         class="btn btn-sm btn-outline-success"
-        v-if="showHistory"
-        @click="showHistory = false"
+        v-if="history"
+        @click="showHistory(false)"
       >
         ユーザー詳細
       </button>
       <button
         class="btn btn-sm btn-outline-success"
-        v-if="!showHistory"
-        @click="showHistory = true"
+        v-if="!history"
+        @click="showHistory(true)"
       >
         予約履歴
       </button>
@@ -23,71 +23,17 @@
   </nav>
 
   <div class="container">
-    <form v-if="!showHistory">
-      <div class="row">
-        <div class="col-12">
-          <h4>ユーザー詳細</h4>
-          <span class="notification">{{ message }}</span>
-        </div>
+    <UserDetailForm
+      :userProps="user"
+      @updateUser="updateUser"
+      v-if="!history"
+    />
 
-        <div class="col-sm-6">
-          <small>姓</small>
-          <input type="text" v-model="user.first_name" class="form-control">
-          <small>名</small>
-          <input type="text" v-model="user.last_name" class="form-control">
-          <small>性別</small>
-          <select v-model="user.gender" class="form-select">
-            <option
-              v-for="gender in genders"
-              :key="gender"
-              :value="gender"
-            >
-              {{ gender }}
-            </option>
-          </select>
-          <small>メールアドレス</small>
-          <input type="text" v-model="user.email" class="form-control">
-          <small>電話番号</small>
-          <input type="text" v-model="user.phone" class="form-control">
-          <small>生年月日</small>
-          <input class="form-control" type="text" v-model="user.birthday">
-          <small>ステータス</small>
-          <input class="form-control" type="text" v-model="user.status">
-        </div>
-
-        <div class="col-sm-6">
-          <small>郵便番号</small>
-          <input class="form-control" type="text" v-model="user.zip">
-          <small>都道府県</small>
-          <select v-model="user.state" class="form-select" autocomplete="address-level1">
-            <option
-              v-for="state in states"
-              :key="state"
-              :value="state"
-            >
-              {{ state }}
-            </option>
-          </select>
-          <small>市区町村</small>
-          <input class="form-control" type="text" v-model="user.city">
-          <small>以降の住所</small>
-          <input class="form-control" type="text" v-model="user.address">
-          <small>ご要望など</small>
-          <textarea rows="3" class="form-control" v-model="user.note"></textarea>
-          <div class="control-navbar-item">
-            <button class="btn btn-sm btn-outline-primary" @click.prevent="updateUser()">更新</button>
-            <button class="btn btn-sm btn-outline-danger">退会</button>
-          </div>
-        </div>
-
-      </div>
-    </form>
-
-    <div class="row" v-if="showHistory">
+    <div class="row" v-if="history">
       <div class="col-12">
         <h4>予約履歴</h4>
         <small>予約回数: {{ events.length }} | </small>
-        <small>総売上: ${{ totalSpent }} | </small>
+        <small>総売上: ¥{{ totalSpent }} | </small>
         <small>最終予約日: {{ lastVisit }}</small>
       </div>
       <hr>
@@ -116,7 +62,11 @@
 
 <script>
 import axios from 'axios'
+import UserDetailForm from '../components/UserDetailForm.vue'
   export default {
+    components: {
+      UserDetailForm,
+    },
     data() {
       return {
         user: {
@@ -140,8 +90,8 @@ import axios from 'axios'
           "SD", "TN", "TX", "UT", "VT",
           "VA", "WA", "WV", "WI", "WY"
         ],
-        showHistory: false,
         message: null,
+        history: false
       }
     },
     created() {
@@ -168,7 +118,6 @@ import axios from 'axios'
           return 0
         }
         let booked = this.events.filter((event)=> event.status === "booked")
-        console.log(booked);
         return booked.map((event)=> event.total_spent).reduce((sum, price)=> sum + price, 0)
       },
       lastVisit() {
@@ -221,6 +170,9 @@ import axios from 'axios'
         })
         this.message = "User updated";
         setTimeout(()=> {this.message = null}, 3000);
+      },
+      showHistory(boolean) {
+        this.history = boolean;
       },
     },
   }

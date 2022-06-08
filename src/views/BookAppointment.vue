@@ -7,7 +7,7 @@
           id="progress-1"
           class="progress-bar"
           role="progressbar"
-          style="width: 25%;"
+          style="width: 33%;"
           aria-valuenow="25"
           aria-valuemin="0"
           aria-valuemax="25"
@@ -18,14 +18,14 @@
           id="progress-2"
           class="progress-bar bg-secondary"
           role="progressbar"
-          style="width: 25%;"
+          style="width: 33%;"
           aria-valuenow="25"
           aria-valuemin="0"
           aria-valuemax="25"
         >
           日時
         </div>
-        <div
+        <!-- <div
           id="progress-3"
           class="progress-bar bg-secondary"
           role="progressbar"
@@ -35,12 +35,12 @@
           aria-valuemax="25"
         >
           お客様情報
-        </div>
+        </div> -->
         <div
-          id="progress-4"
+          id="progress-3"
           class="progress-bar bg-secondary"
           role="progressbar"
-          style="width: 25%;"
+          style="width: 34%;"
           aria-valuenow="25"
           aria-valuemin="0"
           aria-valuemax="25"
@@ -75,8 +75,8 @@
                 >
                 {{ menu.title }}
                 <ul class="text-end">
-                  <li><small>{{ menu.duration }} min</small></li>
-                  <li><small>${{ menu.price }}~</small></li>
+                  <li><small>{{ menu.duration }} 分</small></li>
+                  <li><small>¥{{ menu.price }}~</small></li>
                 </ul>
               </label>
             </div>
@@ -90,7 +90,7 @@
               <label
                 class="list-group-item"
               >
-              <p>Total duration</p>
+              <p>施術時間合計</p>
                 <p class="text-end">
                   {{ durationSumInString }}
                 </p>
@@ -172,7 +172,7 @@
       </form>
     </div>
 
-    <div class="user-info" v-if="currentStep === 3">
+    <!-- <div class="user-info" v-if="currentStep === 3">
       <div class="text-start">
         <h5>お客様情報</h5>
       </div>
@@ -244,9 +244,9 @@
           </div>
         </div>
       </form>
-    </div>
+    </div> -->
 
-    <div class="confirmation" v-if="currentStep === 4">
+    <div class="confirmation" v-if="currentStep === 3">
       <form v-on:submit.prevent="createAppointment()">
         <div class="row">
           <div class="text-start">
@@ -284,7 +284,7 @@
                       <li>
                         {{ menu.title }}
                       </li>
-                      <span>${{ menu.price }}</span>
+                      <span>¥{{ menu.price }}</span>
                     </div>
                   </ul>
                   <hr>
@@ -426,7 +426,7 @@ import * as moment from 'moment-timezone';
           "鹿児島県", "沖縄県"
         ],
         // NYC service tax rate
-        taxRate: 0.045,
+        taxRate: 0.1,
         confirmCheckbox: false,
         picked: ref(new Date),
       }
@@ -452,11 +452,11 @@ import * as moment from 'moment-timezone';
         return durationSum;
       },
       endTime() {
-        var endTime = moment(this.selectedTime).add(this.totalDuration,'minute').format('hh:mm A');
+        var endTime = moment.tz(this.selectedTime, 'Asia/Tokyo').add(this.totalDuration,'minutes').format('hh:mm A');
         return endTime;
       },
       endTimeParams() {
-        var endTime = moment(this.selectedTime).add(this.totalDuration,'minute').format();
+        var endTime = moment.tz(this.selectedTime, 'Asia/Tokyo').add(this.totalDuration,'minutes').format();
         return endTime;
       },
       durationSum() {
@@ -473,7 +473,7 @@ import * as moment from 'moment-timezone';
         this.selectedMenus.forEach((menu) => {durationSumHour += menu.duration});
         durationSumMin = durationSumHour % 60;
         durationSumHour = (durationSumHour - (durationSumHour % 60)) / 60;
-        return `${durationSumHour} hour ${durationSumMin} min`;
+        return `${durationSumHour} 時間 ${durationSumMin} 分`;
       },
       USformattedPicked() {
         return moment(this.picked).format('MM-DD-YYYY');
@@ -539,15 +539,15 @@ import * as moment from 'moment-timezone';
         })
       },
       nextStep() {
-        if (this.currentStep < 4) {
+        if (this.currentStep < 3) {
           this.currentStep++;
         }
         if (this.currentStep === 2) {
           document.querySelector('#progress-2').classList.remove('bg-secondary');
         } else if (this.currentStep === 3) {
           document.querySelector('#progress-3').classList.remove('bg-secondary');
-        } else if (this.currentStep === 4) {
-          document.querySelector('#progress-4').classList.remove('bg-secondary');
+        // } else if (this.currentStep === 4) {
+        //   document.querySelector('#progress-4').classList.remove('bg-secondary');
         }
       },
       prevStep() {
@@ -558,8 +558,8 @@ import * as moment from 'moment-timezone';
           document.querySelector('#progress-2').classList.add('bg-secondary');
         } else if (this.currentStep === 2) {
           document.querySelector('#progress-3').classList.add('bg-secondary');
-        } else if (this.currentStep === 3) {
-          document.querySelector('#progress-4').classList.add('bg-secondary');
+        // } else if (this.currentStep === 3) {
+        //   document.querySelector('#progress-4').classList.add('bg-secondary');
         }
       },
       createAppointment() {
@@ -586,7 +586,7 @@ import * as moment from 'moment-timezone';
         this.selectedTime = null;
         document.querySelector('#progress-2').classList.add('bg-secondary');
         document.querySelector('#progress-3').classList.add('bg-secondary');
-        document.querySelector('#progress-4').classList.add('bg-secondary');
+        // document.querySelector('#progress-4').classList.add('bg-secondary');
       },
       checkout() {
         let total = this.subTotal + this.serviceTax;

@@ -22,7 +22,11 @@ const routes = [
   {
     path: '/admin/calendar',
     name: 'adminCalendar',
-    component: AdminCalendar
+    component: AdminCalendar,
+    // beforeEnter: () => {
+    //   // reject the navigation
+    //   return false
+    // },
   },
   {
     path: '/admin/menus',
