@@ -152,7 +152,7 @@
                 <!-- <button class="btn btn-primary">Update</button> -->
                 <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">閉じる</button>
                 <button class="btn btn-warning btn-sm" @click="this.user = {}">クリア</button>
-                <button class="btn btn-primary btn-sm" @click="handleUpdateUser()">登録</button>
+                <button class="btn btn-primary btn-sm" @click="handleUpdateUser()">更新</button>
               </div>
             </div>
           </form>

@@ -146,7 +146,7 @@
                   :value="timeSlot.time"
                   v-model="selectedTime"
                 >
-                {{ timeSlot.time.slice(11, -13) }}
+                {{ timeSlot.time.slice(11, -8) }}
               </label>
             </div>
           </div>
@@ -452,11 +452,13 @@ import * as moment from 'moment-timezone';
         return durationSum;
       },
       endTime() {
-        var endTime = moment.tz(this.selectedTime, 'Asia/Tokyo').add(this.totalDuration,'minutes').format('hh:mm A');
+        // let endTime = moment(this.selectedTime).add(this.totalDuration,'minutes').format('hh:mm A');
+        let time = moment(this.selectedTime).clone().tz('Europe/London')
+        let endTime = moment(time).add(this.totalDuration,'minutes').format('hh:mm A');
         return endTime;
       },
       endTimeParams() {
-        var endTime = moment.tz(this.selectedTime, 'Asia/Tokyo').add(this.totalDuration,'minutes').format();
+        var endTime = moment(this.selectedTime).add(this.totalDuration,'minutes').format();
         return endTime;
       },
       durationSum() {
@@ -479,8 +481,8 @@ import * as moment from 'moment-timezone';
         return moment(this.picked).format('MM-DD-YYYY');
       },
       USformattedTime() {
-        var tokyo = moment.tz(this.selectedTime, 'Asia/Tokyo');
-        return tokyo.format('hh:mm A');
+        let time = moment(this.selectedTime).clone().tz('Europe/London')
+        return moment(time).format('hh:mm A');
       },
       filteredBusinessTimes() {
         // 指定日の時間の呼び出し
