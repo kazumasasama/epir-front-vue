@@ -115,6 +115,7 @@
     <div class="pick-date" v-if="currentStep === 2">
       <div class="text-start">
         <h5>日時選択</h5>
+        <p><small>本日より90日後までご予約いただけます。</small></p>
       </div>
       <form>
         <div class="row">
