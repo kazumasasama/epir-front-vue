@@ -508,7 +508,7 @@ import * as moment from 'moment-timezone';
         }
         let availableTime = available.map(timeSlot => {
           let res = {...timeSlot};
-          res.time = moment.tz(res.time, 'America/New_York').format();
+          res.time = moment.tz(res.time, 'Asia/Tokyo').format();
           return res;
         })
         return availableTime
