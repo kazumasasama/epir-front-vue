@@ -490,10 +490,15 @@ import * as moment from 'moment-timezone';
         let openTimes = this.businessTimes.filter(timeSlots => timeSlots.date === this.formattedPicked).sort((a, b)=> {
           return a.id - b.id;
         }).filter((time)=> time.available === true);
+
         // 必要時間が最低スロット時間の場合全てのopenTimesを返す
         let keepingTime = this.totalDuration / 30;
         if (keepingTime === 1) {
-          openTimes = openTimes.forEach((busisnessTime)=> {busisnessTime.time = moment(busisnessTime.time)});
+          openTimes = openTimes.map(timeSlot => {
+          let res = {...timeSlot};
+          res.time = moment.tz(res.time, 'Europe/London').format();
+          return res;
+        })
           return openTimes
         }
         // 必要時間分の空きがあるスロットを取得
