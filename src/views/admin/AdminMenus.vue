@@ -181,7 +181,7 @@
         let id = this.updatingMenu.id;
         this.updatingMenu.active = false;
         axios
-        .patch(`/menus/${id}`, this.updatingMenu)
+        .patch(`/menus/${id}.json`, this.updatingMenu)
         .then((res)=> {
           this.selectedMenu = {};
           let menu = this.menus.find(menu => menu.id === id);
@@ -193,7 +193,7 @@
         let id = this.updatingMenu.id;
         this.updatingMenu.active = true;
         axios
-        .patch(`/menus/${id}`, this.updatingMenu)
+        .patch(`/menus/${id}.json`, this.updatingMenu)
         .then((res)=> {
           this.selectedMenu = {};
           let menu = this.menus.find(menu => menu.id === id);
