@@ -147,7 +147,7 @@
                   :value="timeSlot.time"
                   v-model="selectedTime"
                 >
-                {{ timeSlot.time.slice(11, -8) }}
+                {{ timeSlot.time.slice(11, -4) }}
               </label>
             </div>
           </div>
@@ -487,25 +487,31 @@ import * as moment from 'moment-timezone';
       },
       filteredBusinessTimes() {
         // 指定日の時間の呼び出し
-        var openTimes = this.businessTimes.filter(timeSlots => timeSlots.date === this.formattedPicked).sort((a, b)=> {
+        let openTimes = this.businessTimes.filter(timeSlots => timeSlots.date === this.formattedPicked).sort((a, b)=> {
           return a.id - b.id;
         }).filter((time)=> time.available === true);
         // 必要時間が最低スロット時間の場合全てのopenTimesを返す
-        var keepingTime = this.totalDuration / 30;
+        let keepingTime = this.totalDuration / 30;
         if (keepingTime === 1) {
-          return openTimes;
+          openTimes = openTimes.forEach((busisnessTime)=> {busisnessTime.time = moment(busisnessTime.time)});
+          return openTimes
         }
         // 必要時間分の空きがあるスロットを取得
-        var i = 0;
-        var available = [];
-        var x = keepingTime;
+        let i = 0;
+        let available = [];
+        let x = keepingTime;
         while (i < openTimes.length - x + 1) {
           if (openTimes[i].id === openTimes[i + x - 1].id - (x - 1)) {
             available.push(openTimes[i]);
           }
           i++;
         }
-        return available
+        let availableTime = available.map(timeSlot => {
+          let res = {...timeSlot};
+          res.time = moment.tz(res.time, 'Europe/London').format();
+          return res;
+        })
+        return availableTime
       },
       selectedMenuIds() {
         return this.selectedMenus.map((menu)=> menu.id);
