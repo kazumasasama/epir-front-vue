@@ -182,11 +182,13 @@
         this.updatingMenu.active = false;
         axios
         .patch(`/menus/${id}.json`, this.updatingMenu)
-        .then((res)=> {
-          this.selectedMenu = {};
+        .then(()=> {
           let menu = this.menus.find(menu => menu.id === id);
           let i = this.menus.indexOf(menu);
-          this.menus[i] = res.data;
+          this.menus[i] = this.updatingMenu;
+        })
+        .then(()=> {
+          this.selectedMenu = {};
         })
       },
       activateMenu() {
@@ -194,11 +196,13 @@
         this.updatingMenu.active = true;
         axios
         .patch(`/menus/${id}.json`, this.updatingMenu)
-        .then((res)=> {
-          this.selectedMenu = {};
+        .then(()=> {
           let menu = this.menus.find(menu => menu.id === id);
           let i = this.menus.indexOf(menu);
-          this.menus[i] = res.data;
+          this.menus[i] = this.updatingMenu;
+        })
+        .then(()=> {
+          this.selectedMenu = {};
         })
       },
       clearForm() {
