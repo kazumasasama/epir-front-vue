@@ -40,7 +40,11 @@ import axios from 'axios'
           axios.defaults.headers.common["Authorization"] = "Bearer " + res.data.jwt;
           localStorage.setItem("jwt", res.data.jwt);
           localStorage.setItem("user_id", res.data.user_id);
-          this.$router.push('/appointments');
+          if (res.data.admin == true) {
+            this.$router.push('/admin/calendar');
+          } else {
+            this.$router.push('/appointments');
+          }
         })
         .catch((error)=> {
           console.log(error.response);

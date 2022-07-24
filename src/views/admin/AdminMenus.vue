@@ -39,7 +39,7 @@
             <div class="text-end">
               <small>{{ menu.duration }} min</small>
               <small> | </small>
-              <small>${{ menu.price }}~</small>
+              <small>¥{{ menu.price }}~</small>
             </div>
           </label>
         </div>
@@ -182,14 +182,14 @@
         this.updatingMenu.active = false;
         axios
         .patch(`/menus/${id}.json`, this.updatingMenu)
-        .then(()=> {
-          let menu = this.menus.find(menu => menu.id === id);
-          let i = this.menus.indexOf(menu);
-          this.menus[i] = this.updatingMenu;
-        })
-        .then(()=> {
-          this.selectedMenu = {};
-        })
+        // .then(()=> {
+        //   let menu = this.menus.find(menu => menu.id === id);
+        //   let i = this.menus.indexOf(menu);
+        //   this.menus[i] = this.updatingMenu;
+        // })
+        // .then(()=> {
+        //   this.selectedMenu = {};
+        // })
       },
       activateMenu() {
         let id = this.updatingMenu.id;
