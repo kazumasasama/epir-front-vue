@@ -454,7 +454,7 @@ import * as moment from 'moment-timezone';
       },
       endTime() {
         // let endTime = moment(this.selectedTime).add(this.totalDuration,'minutes').format('hh:mm A');
-        let time = moment(this.selectedTime).clone().tz('Europe/London')
+        let time = moment(this.selectedTime)
         let endTime = moment(time).add(this.totalDuration,'minutes').format('hh:mm A');
         return endTime;
       },
@@ -482,7 +482,7 @@ import * as moment from 'moment-timezone';
         return moment(this.picked).format('MM-DD-YYYY');
       },
       USformattedTime() {
-        let time = moment(this.selectedTime).clone().tz('Europe/London')
+        let time = moment(this.selectedTime)
         return moment(time).format('hh:mm A');
       },
       filteredBusinessTimes() {
@@ -496,7 +496,7 @@ import * as moment from 'moment-timezone';
         if (keepingTime === 1) {
           openTimes = openTimes.map(timeSlot => {
           let res = {...timeSlot};
-          res.time = moment.tz(res.time, 'Europe/London').format();
+          res.time = moment(res.time).format();
           return res;
         })
           return openTimes
@@ -513,7 +513,7 @@ import * as moment from 'moment-timezone';
         }
         let availableTime = available.map(timeSlot => {
           let res = {...timeSlot};
-          res.time = moment.tz(res.time, 'Europe/London').format();
+          res.time = moment(res.time).format();
           return res;
         })
         return availableTime
