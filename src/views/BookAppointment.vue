@@ -147,7 +147,7 @@
                   :value="timeSlot.time"
                   v-model="selectedTime"
                 >
-                {{ timeSlot.time.slice(11, -4) }}
+                {{ timeSlot.time.slice(11, -9) }}
               </label>
             </div>
           </div>
@@ -495,10 +495,10 @@ import * as moment from 'moment-timezone';
         let keepingTime = this.totalDuration / 30;
         if (keepingTime === 1) {
           openTimes = openTimes.map(timeSlot => {
-          let res = {...timeSlot};
-          res.time = moment(res.time, 'Asia/Tokyo').format();
-          return res;
-        })
+            let res = {...timeSlot};
+            res.time = moment(res.time, 'Asia/Tokyo').format();
+            return res;
+          })
           return openTimes
         }
         // 必要時間分の空きがあるスロットを取得
