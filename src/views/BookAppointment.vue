@@ -496,7 +496,7 @@ import * as moment from 'moment-timezone';
         if (keepingTime === 1) {
           openTimes = openTimes.map(timeSlot => {
           let res = {...timeSlot};
-          res.time = moment(res.time).format();
+          res.time = moment(res.time, 'Asia/Tokyo').format();
           return res;
         })
           return openTimes
@@ -513,7 +513,7 @@ import * as moment from 'moment-timezone';
         }
         let availableTime = available.map(timeSlot => {
           let res = {...timeSlot};
-          res.time = moment(res.time).format();
+          res.time = moment.tz(res.time, 'Asia/Tokyo').format();
           return res;
         })
         return availableTime
