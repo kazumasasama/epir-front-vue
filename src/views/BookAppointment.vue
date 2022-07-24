@@ -147,7 +147,7 @@
                   :value="timeSlot.time"
                   v-model="selectedTime"
                 >
-                {{ timeSlot.time.slice(11, -9) }}
+                {{ timeSlot.time }}
               </label>
             </div>
           </div>
