@@ -147,7 +147,7 @@
                   :value="timeSlot.time"
                   v-model="selectedTime"
                 >
-                {{ timeSlot.time }}
+                {{ timeSlot.time.slice(11, -9) }}
               </label>
             </div>
           </div>
@@ -270,7 +270,7 @@
           </div>
           <div class="col-sm-4">
             <small class="confirm-item-tag">予約日:</small>
-            <p>{{ USformattedPicked }}</p>
+            <p>{{ bookingDate }}</p>
             <small class="confirm-item-tag">時間:</small>
             <p>{{ USformattedTime }} - {{ endTime }}</p>
           </div>
@@ -405,7 +405,6 @@ import * as moment from 'moment-timezone';
         menu: {},
         businessTimes: [],
         selectedMenus: [],
-        selectedDate: moment().format('YYYY-MM-DD'),
         selectedTime: null,
         user: {},
         genders: [
@@ -453,14 +452,10 @@ import * as moment from 'moment-timezone';
         return durationSum;
       },
       endTime() {
-        // let endTime = moment(this.selectedTime).add(this.totalDuration,'minutes').format('hh:mm A');
-        let time = moment(this.selectedTime)
-        let endTime = moment(time).add(this.totalDuration,'minutes').format('hh:mm A');
-        return endTime;
+        return moment.tz(this.selectedTime, 'Asia/Tokyo').add(this.totalDuration,'minutes').format('HH:mm');
       },
       endTimeParams() {
-        var endTime = moment(this.selectedTime).add(this.totalDuration,'minutes').format();
-        return endTime;
+        return moment.tz(this.selectedTime, 'Asia/Tokyo').add(this.totalDuration,'minutes');
       },
       durationSum() {
         let durationSumHour = 0;
@@ -482,12 +477,11 @@ import * as moment from 'moment-timezone';
         return moment(this.picked).format('MM-DD-YYYY');
       },
       USformattedTime() {
-        let time = moment(this.selectedTime)
-        return moment(time).format('hh:mm A');
+        return this.selectedTime.slice(11, -9);
       },
       filteredBusinessTimes() {
         // 指定日の時間の呼び出し
-        let openTimes = this.businessTimes.filter(timeSlots => timeSlots.date === this.formattedPicked).sort((a, b)=> {
+        let openTimes = this.businessTimes.filter(timeSlots => timeSlots.time.slice(0, -19) === this.bookingDate).sort((a, b)=> {
           return a.id - b.id;
         }).filter((time)=> time.available === true);
 
@@ -496,7 +490,7 @@ import * as moment from 'moment-timezone';
         if (keepingTime === 1) {
           openTimes = openTimes.map(timeSlot => {
             let res = {...timeSlot};
-            res.time = moment(res.time, 'Asia/Tokyo').format('hh:mm A');
+            res.time = moment.tz(res.time, 'Asia/Tokyo').format();
             return res;
           })
           return openTimes
@@ -513,10 +507,11 @@ import * as moment from 'moment-timezone';
         }
         let availableTime = available.map(timeSlot => {
           let res = {...timeSlot};
-          res.time = moment.tz(res.time, 'Asia/Tokyo').format('hh:mm A');
+          res.time = moment.tz(res.time, 'Asia/Tokyo').format();
           return res;
         })
         return availableTime
+        // return this.businessTimes
       },
       selectedMenuIds() {
         return this.selectedMenus.map((menu)=> menu.id);
@@ -578,7 +573,6 @@ import * as moment from 'moment-timezone';
       },
       createAppointment() {
         let bookingInfo = {
-          "date": this.bookingDate,
           "start": this.selectedTime,
           "end": this.endTimeParams,
           "user_id": this.user.id,
